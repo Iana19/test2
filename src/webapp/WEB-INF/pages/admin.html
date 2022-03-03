@@ -4,29 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Пользователи</title>
+    <style type="text/css">
+        TABLE {
+            width: 300px; /* Ширина таблицы */
+            border: 2px solid black; /* Рамка вокруг таблицы */
+            background: #778899; /* Цвет фона */
+            color: white; /* Цвет текста */
+        }
+        TD, TH {
+            text-align: center; /* Выравнивание по центру */
+            padding: 3px; /* Поля вокруг текста */
+        }
+        TH {
+            color: white; /* Цвет текста */
+            border-bottom: 4px double black; /* Двойная линия снизу */
+        }
+    </style>
 </head>
 <body>
 <table border="1">
     <thead>
     <tr>Пользователи</tr>
+    <br>
     </thead>
     <tbody>
     <tr>
-        <th>id</th>
-        <th>name</th>
-        <th>password</th>
-        <th>lastname</th>
-        <th>age</th>
-        <th>city</th>
-        <th>action</th>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>LAST NAME</th>
+        <th>AGE</th>
+        <th>ACTION</th>
     </tr>
     <tr th:each="user : ${usersList}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
-        <td th:password="${user.password}"></td>
         <td th:text="${user.lastname}"></td>
         <td th:text="${user.age}"></td>
-        <td th:text="${user.city}"></td>
         <td>
             <a th:href="@{'/admin/edit/'+${user.id}}">edit</a>
             <a th:href="@{'/admin/delete/'+${user.id}}">delete</a>

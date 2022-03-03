@@ -1,65 +1,58 @@
 package web.service;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import web.dao.UserDAO;
-import web.dao.RoleDAO;
-import web.model.Role;
+import web.dao.RoleDao;
+import web.dao.UserDao;
 import web.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private UserDAO userDAO;
-    private RoleDAO roleDAO;
+    private UserDao userDao;
+    private RoleDao roleDao;
 
     @Autowired
     PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 
     @Override
     public List<User> allUsers() {
-        return userDAO.allUsers();
+        return userDao.allUsers();
     }
 
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
+        userDao.save(user);
     }
 
     @Override
     public void delete(User user) {
-        userDAO.delete(user);
+        userDao.delete(user);
     }
 
     @Override
     public User getById(Long id) {
-        return userDAO.getById(id);
+        return userDao.getById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User user = userDAO.getUserByName(username);
+        User user = userDao.getUserByName(username);
         return user;
     }
 }

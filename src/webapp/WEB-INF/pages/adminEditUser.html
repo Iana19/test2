@@ -21,9 +21,6 @@
         <p><label for="age">age</label></p>
         <p><input type="number" th:field="*{age}" id="age" value="age"></p>
 
-        <p><label for="city">city</label></p>
-        <p><input type="text" th:field="*{city}" id="city" value="city"></p>
-
         <ul>
             <li th:each="role : ${rolelist}">
                 <input type="checkbox" name="roles" th:field="*{roles}" th:value="${role}"

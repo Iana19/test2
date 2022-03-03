@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -20,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource(value = {"classpath:db.properties"})
+@PropertySource(value = {"classpath:app.properties"})
 public class HibernateConfig {
 
     private final Environment environment;
@@ -30,7 +29,6 @@ public class HibernateConfig {
         this.environment = environment;
     }
 
-    /************* Start Spring JPA config details **************/
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
@@ -55,7 +53,6 @@ public class HibernateConfig {
         return jpaTransactionManager;
     }
 
-    /************* End Spring JPA config details **************/
 
     @Bean
     public DataSource dataSource() {

@@ -3,11 +3,9 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import web.dao.RoleDAO;
-import web.dao.UserDAO;
+import web.dao.RoleDao;
 import web.model.Role;
 import web.model.User;
 import web.service.UserService;
@@ -20,15 +18,15 @@ import java.util.Set;
 @RequestMapping("/")
 public class AdminController {
     private final UserService userService;
-    private final RoleDAO roleDAO;
+    private final RoleDao roleDao;
 
     @Autowired
     PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AdminController(UserService userService, RoleDAO roleDAO) {
+    public AdminController(UserService userService, RoleDao roleDao) {
         this.userService = userService;
-        this.roleDAO = roleDAO;
+        this.roleDao = roleDao;
     }
 
     @GetMapping("/admin")
@@ -57,12 +55,12 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("adminEditUser");
         modelAndView.addObject("user", user);
-        HashSet<Role> Setroles = new HashSet<>();
-        Role role_admin = roleDAO.createRoleIfNotFound("ADMIN", 1L);
-        Role role_user = roleDAO.createRoleIfNotFound("USER", 2L);
-        Setroles.add(role_admin);
-        Setroles.add(role_user);
-        modelAndView.addObject("rolelist", Setroles);
+        HashSet<Role> setRoles = new HashSet<>();
+        Role roleOfAdmin = roleDao.createRoleIfNotFound("ADMIN", 1L);
+        Role roleOfUser = roleDao.createRoleIfNotFound("USER", 2L);
+        setRoles.add(roleOfAdmin);
+        setRoles.add(roleOfUser);
+        modelAndView.addObject("rolelist", setRoles);
         return modelAndView;
     }
 
@@ -73,29 +71,27 @@ public class AdminController {
             @ModelAttribute("password") String password,
             @ModelAttribute("lastname") String lastname,
             @ModelAttribute("age") byte age,
-            @ModelAttribute("city") String city,
             @RequestParam("roles") String[] roles
     ) {
         User user = userService.getById(id);
         user.setName(name);
         user.setLastname(lastname);
         user.setAge(age);
-        user.setCity(city);
         if (!password.isEmpty()) {
             user.setPassword(password);
         }
-        Set<Role> Setroles = new HashSet<>();
+        Set<Role> setRoles = new HashSet<>();
         for (String st : roles) {
             if (st.equals("ADMIN")) {
-                Role role_admin = roleDAO.createRoleIfNotFound("ADMIN", 1L);
-                Setroles.add(role_admin);
+                Role roleOfAdmin = roleDao.createRoleIfNotFound("ADMIN", 1L);
+                setRoles.add(roleOfAdmin);
             }
             if (st.equals("USER")) {
-                Role role_user = roleDAO.createRoleIfNotFound("USER", 2L);
-                Setroles.add(role_user);
+                Role roleOfUser = roleDao.createRoleIfNotFound("USER", 2L);
+                setRoles.add(roleOfUser);
             }
         }
-        user.setRoles(Setroles);
+        user.setRoles(setRoles);
         userService.save(user);
         return "redirect:/admin";
     }
@@ -106,6 +102,5 @@ public class AdminController {
         userService.delete(user);
         return "redirect:/admin";
     }
-
 
 }
